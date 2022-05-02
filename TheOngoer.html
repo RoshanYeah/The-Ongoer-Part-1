@@ -1,0 +1,104 @@
+<!DOCTYPE html><html><head>
+  <script src="./libraries/p5.min.js"></script>
+  <script src="./libraries/p5.dom.min.js"></script>
+  <script src="./libraries/p5.sound.min.js"></script>
+  <script src="./libraries/p5.play.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta charset="utf-8">
+
+</head>
+
+<body>
+  <script src="./libraries/matter.min.js"></script>
+ 
+  <script>
+
+var backgroundImg;
+var gizmo,gizmoImg,gizmoStill,gizmoLeft,gizmoJump;
+var boss,bossImg;
+var portalBlue,portalBlueImg;
+var ground;
+var gameState=0
+var START=0
+var FLAPPYBIRD=1
+let posX=0,posY=0
+
+
+function preload(){
+  backgroundImg = loadImage("./Gizmo sprites/Boss-Fight-Room.jpg")
+  gizmoImg = loadAnimation("./Gizmo sprites/gizmo-1.png","./Gizmo sprites/gizmo-2.png","./Gizmo sprites/gizmo-3.png","./Gizmo sprites/gizmo-4.png")
+  gizmoStill = loadImage("./Gizmo sprites/gizmo-7.png")
+  gizmoLeft = loadAnimation("./Gizmo sprites/gizmo-1-r.png","./Gizmo sprites/gizmo-2-r.png","./Gizmo sprites/gizmo-3-r.png","./Gizmo sprites/gizmo-4-r.png")
+  bossImg = loadImage("./Gizmo sprites/Wasp-Boss.gif")
+  portalBlueImg = loadImage("./Gizmo sprites/portal-blue.png")
+  gizmoJump = loadImage("./Gizmo sprites/gizmo-5.png")
+
+}
+
+function setup() {
+  createCanvas(800,600);
+
+  gizmo = createSprite(100,550,10,10)
+  gizmo.addImage("still", gizmoStill)
+  gizmo.addAnimation("running", gizmoImg)
+  gizmo.addAnimation("leftRunning", gizmoLeft)
+  gizmo.addImage("jumping", gizmoJump)
+  gizmo.scale = 0.3
+
+  ground = createSprite(400,600,800,10)
+
+  portalBlue = createSprite(600,75,10,10)
+  portalBlue.addImage("bluePortal", portalBlueImg)
+  portalBlue.scale=0.3
+  
+
+
+  
+  createEdgeSprites()  
+}
+
+
+function draw() 
+{
+  background(backgroundImg);
+  //text("")
+  image(bossImg,posX,posY,50,50)
+  posX=posX+3
+  posY=posY+3
+
+  if(gameState===START){
+    if(keyDown("RIGHT_ARROW")){
+      gizmo.x = gizmo.x+5
+      gizmo.changeAnimation("running", gizmoImg)
+    }
+    else{
+      gizmo.changeImage("still")
+    }
+  
+    if(keyDown("LEFT_ARROW")){
+      gizmo.x = gizmo.x-5
+      gizmo.changeAnimation("leftRunning")
+    }
+    if(keyDown("UP_ARROW")){
+      gizmo.y = gizmo.y-7
+      gizmo.changeImage("jumping")
+    }
+
+    if(gizmo.isTouching(portalBlue)){
+      gameState=FLAPPYBIRD
+
+    }
+  }
+if(gameState===FLAPPYBIRD){
+window.location="FlappyBird.html"
+  }
+ 
+  
+  drawSprites()
+}
+
+
+  </script>
+
+
+</body></html>
